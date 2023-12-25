@@ -6,41 +6,125 @@ const { NotImplementedError } = require('../extensions/index.js');
 * Implement simple binary search tree according to task description
 * using Node from extensions
 */
+
+class Node {
+  constructor(data) {
+    this.data = data;
+    this.left = null;
+    this.right = null;
+  }
+}
 class BinarySearchTree {
-
+  constructor() {
+    this.rootNode = null;
+  }
   root() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+    return this.rootNode ? this.rootNode.data : null;
+  }
+  
+  addNode(node, data) {
+    if (!node) return new Node(data);
+
+    if (data < node.data) {
+      node.left = this.addNode(node.left, data);
+    } else if (data > node.data) {
+      node.right = this.addNode(node.right, data);
+    }
+
+    return node;
+  }
+  add(data) {
+    this.rootNode = this.addNode(this.rootNode, data);
   }
 
-  add(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  has(data) {
+    let current = this.rootNode;
+    while (current) {
+      if (data === current.data) {
+        return true;
+      }
+      if (data < current.data) {
+        current = current.left;
+      } else {
+        current = current.right;
+      }
+    }
+    return false;
   }
 
-  has(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  find(data) {
+    let current = this.rootNode;
+    while (current) {
+      if (data === current.data) {
+        return current;
+      }
+      if (data < current.data) {
+        current = current.left;
+      } else {
+        current = current.right;
+      }
+    }
+    return null;
   }
 
-  find(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  findMinNode(node) {
+    while (node.left !== null) {
+      node = node.left;
+    }
+    return node;
   }
 
-  remove(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  removeNode(node, data) {
+    if (node === null) {
+      return null;
+    }
+
+    if (data === node.data) {
+      if (node.left === null && node.right === null) {
+        return null;
+      }
+
+      if (node.left === null) {
+        return node.right;
+      }
+      if (node.right === null) {
+        return node.left;
+      }
+
+      const tempNode = this.findMinNode(node.right);
+      node.data =tempNode.data;
+      node.right = this.removeNode(node.right, tempNode.data);
+      return node;
+    } else if (data < node.data) {
+      node.left = this.removeNode(node.left, data);
+      return node;
+    } else {
+      node.right = this.removeNode(node.right, data);
+      return node;
+    }
+  }
+  remove(data) {
+    this.rootNode = this.removeNode(this.rootNode, data);
   }
 
   min() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+    if (!this.rootNode) return null;
+
+    let current = this.rootNode;
+    while (current.left) {
+      current = current.left;
+    }
+    return current.data;
   }
 
   max() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+    if (!this.rootNode) return null;
+
+    let current = this.rootNode;
+    while (current.right) {
+      current = current.right;
+    }
+    return current.data;
   }
 }
 
